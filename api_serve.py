@@ -4,6 +4,7 @@ from urllib.request import urlopen, Request
 from flask import Flask
 from flask_cors import CORS
 import os
+import time
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -17,19 +18,20 @@ def home():
 def filmes():
 	html_doc = urlopen(url_target)
 	soup = BeautifulSoup(html_doc,"html.parser")
-
 	data = []
-
-	for dataBox in soup.find_all('div',class_='card entity-card entity-card-list cf'):
+	for dataBox in soup.find_all('li',class_='mdl'):
 		titleObg = dataBox.find('h2', class_='meta-title').find('a',class_='meta-title-link')
-		img_cont = dataBox.find('img', class_='thumbnail-img')['src']
+		img_cont = dataBox.find('img', class_='thumbnail-img')
+		if(img_cont['src'] == 'data:image/gif;base64,R0lGODlhAwAEAIAAAAAAAAAAACH5BAEAAAAALAAAAAADAAQAAAIDhI9WADs='):
+			imgSrc = img_cont['data-src']
+		else:
+			imgSrc = img_cont['src']
 		data.append({
 		'title':titleObg.text.strip(),
-		'img_src':img_cont.strip()
+		'img_src':imgSrc
 		})
-	return jsonify({'filmes': data})	
-
-def main():
+	return jsonify({'filmes': data})
+def main():	
 	port = int(os.environ.get("PORT",5000))
 	app.run(host="0.0.0.0", port=port)
 
