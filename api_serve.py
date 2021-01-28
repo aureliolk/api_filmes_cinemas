@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
 from flask import Flask
@@ -12,7 +12,7 @@ url_target = "http://www.adorocinema.com/filmes/melhores/"
 
 @app.route('/',methods=['GET'])
 def home():
-	return 'You is programer sd'
+	return render_template('index.html')
 
 @app.route('/api/filmes', methods=['GET'])
 def filmes():
