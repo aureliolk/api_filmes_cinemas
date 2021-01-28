@@ -1,0 +1,10 @@
+.row.filmes {
+    text-align: center;
+}
+
+h4.mb-2 {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
