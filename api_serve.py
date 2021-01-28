@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, redirect
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
 from flask import Flask
@@ -13,6 +13,13 @@ url_target = "http://www.adorocinema.com/filmes/melhores/"
 @app.route('/',methods=['GET'])
 def home():
 	return render_template('index.html')
+
+@app.before_request
+def before_request():
+    if request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
 
 @app.route('/api/filmes', methods=['GET'])
 def filmes():
